@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character Sheet</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="CharacterSheet.js" defer></script>
+    <script src="races.js" defer></script>
+    <script src="UpB_BG.js" defer></script>
+</head>
+<body>
+<!-- Header Container with Save/Load/Reset Buttons -->
+<div class="header-container">
+    <h1>Character Sheet</h1>
+    <div class="header-buttons">
+        <button id="save-button">Save</button>
+        <button id="load-button">Load</button>
+        <button id="reset-button">Reset</button>
+    </div>
+</div>
+
+<div class="main-grid">
+
+    <section class="section general-info">
+    <div class="info-item">
+        <label for="character-name">Name:</label>
+        <input type="text" id="character-name" placeholder="Enter character name">
+    </div>
+    <div class="info-item">
+        <label for="character-pronouns">Pronouns:</label>
+        <input type="text" id="character-pronouns" placeholder="He/Him, She/Her, They/Them">
+    </div>
+    <div class="info-item">
+        <label for="level">Level:</label>
+        <input type="number" id="level" value="1" min="1" max="20" oninput="updateProficiencyBonus()">
+    </div>
+    </section>
+
+    <!-- Character Details -->
+    <section class="section character-details">
+    <div class="details-container">
+        <label>Race:</label>
+        <button class="select-btn" onclick="openPopup('race')">Choose Race</button>
+        <div id="race-details" class="details-box">No race selected</div>
+    </div>
+    <div class="details-container">
+        <label>Upbringing:</label>
+        <button class="select-btn" onclick="openPopup('upbringing')">Choose Upbringing</button>
+        <div id="upbringing-details" class="details-box">No upbringing selected</div>
+    </div>
+    <div class="details-container">
+        <label>Background:</label>
+        <button class="select-btn" onclick="openPopup('background')">Choose Background</button>
+        <div id="background-details" class="details-box">No background selected</div>
+    </div>
+
+<!-- Popup Overlay -->
+<div class="popup-overlay" id="popup">
+    <div class="popup-content">
+        <h3 id="popup-title">Select Option</h3>
+        <ul id="popup-options"></ul>
+        <button onclick="closePopup()">Close</button>
+    </div>
+</div>
+    </section>
+
+    <!-- Derived Stats -->
+    <section class="section derived-stats">
+<!-- Derived Stats Section -->
+    <!-- Lock Button -->
+
+    <!-- HP and Max HP -->
+    <div class="stat-group">
+        <div class="stat-box">
+            <label>HP</label>
+            <input type="number" id="hp" value="0" min="0">
+        </div>
+        <div class="stat-box">
+            <label>Max HP</label>
+            <input type="number" id="max-hp" value="0" min="0">
+        </div>
+    </div>
+
+    <!-- MP and Max MP -->
+    <div class="stat-group">
+        <div class="stat-box">
+            <label>MP</label>
+            <input type="number" id="mp" value="0" min="0">
+        </div>
+        <div class="stat-box">
+            <label>Max MP</label>
+            <input type="number" id="max-mp" value="0" min="0">
+        </div>
+    </div>
+
+<!-- Armor Class and Initiative -->
+<div class="stat-group">
+    <div class="stat-box">
+        <label for="armor-class">Armor Class</label>
+        <input type="number" id="armor-class" value="10" min="0">
+    </div>
+    <div class="stat-box">
+        <label for="initiative">Initiative</label>
+        <input type="number" id="initiative" value="0" readonly>
+    </div>
+</div>
+
+
+    <!-- Proficiency Bonus -->
+    <div class="proficiency">
+        <label>Proficiency Bonus:</label>
+        <input type="number" id="proficiency-bonus" value="2" readonly>
+    </div>
+    </section>
+
+    <!-- Skills -->
+    <section class="section skills">
+    <div class="skills-header">
+    </div>
+
+    <div class="skills-grid">
+        <div class="skill-item">
+            <label for="acrobatics">Acrobatics (DEX)</label>
+            <input type="number" id="acrobatics" value="0" readonly>
+            <button id="acrobatics-button" onclick="toggleSkill('acrobatics')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="animal-handling">Animal Handling (WIS)</label>
+            <input type="number" id="animal-handling" value="0" readonly>
+            <button id="animal-handling-button" onclick="toggleSkill('animal-handling')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="arcana">Arcana (INT)</label>
+            <input type="number" id="arcana" value="0" readonly>
+            <button id="arcana-button" onclick="toggleSkill('arcana')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="athletics">Athletics (STR)</label>
+            <input type="number" id="athletics" value="0" readonly>
+            <button id="athletics-button" onclick="toggleSkill('athletics')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="deception">Deception (CHA)</label>
+            <input type="number" id="deception" value="0" readonly>
+            <button id="deception-button" onclick="toggleSkill('deception')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="history">History (INT)</label>
+            <input type="number" id="history" value="0" readonly>
+            <button id="history-button" onclick="toggleSkill('history')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="insight">Insight (WIS)</label>
+            <input type="number" id="insight" value="0" readonly>
+            <button id="insight-button" onclick="toggleSkill('insight')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="intimidation">Intimidation (CHA)</label>
+            <input type="number" id="intimidation" value="0" readonly>
+            <button id="intimidation-button" onclick="toggleSkill('intimidation')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="investigation">Investigation (INT)</label>
+            <input type="number" id="investigation" value="0" readonly>
+            <button id="investigation-button" onclick="toggleSkill('investigation')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="medicine">Medicine (WIS)</label>
+            <input type="number" id="medicine" value="0" readonly>
+            <button id="medicine-button" onclick="toggleSkill('medicine')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="nature">Nature (INT)</label>
+            <input type="number" id="nature" value="0" readonly>
+            <button id="nature-button" onclick="toggleSkill('nature')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="perception">Perception (WIS)</label>
+            <input type="number" id="perception" value="0" readonly>
+            <button id="perception-button" onclick="toggleSkill('perception')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="performance">Performance (CHA)</label>
+            <input type="number" id="performance" value="0" readonly>
+            <button id="performance-button" onclick="toggleSkill('performance')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="persuasion">Persuasion (CHA)</label>
+            <input type="number" id="persuasion" value="0" readonly>
+            <button id="persuasion-button" onclick="toggleSkill('persuasion')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="religion">Religion (INT)</label>
+            <input type="number" id="religion" value="0" readonly>
+            <button id="religion-button" onclick="toggleSkill('religion')"></button>
+        </div>
+
+		<div class="skill-item">
+			<label for="sleight-of-hand">Sleight of Hand (DEX)</label>
+			<input type="number" id="sleight-of-hand" value="0" readonly>
+			<button id="sleight-of-hand-button" onclick="toggleSkill('sleight-of-hand')"></button>
+		</div>
+
+
+        <div class="skill-item">
+            <label for="stealth">Stealth (DEX)</label>
+            <input type="number" id="stealth" value="0" readonly>
+            <button id="stealth-button" onclick="toggleSkill('stealth')"></button>
+        </div>
+
+        <div class="skill-item">
+            <label for="survival">Survival (WIS)</label>
+            <input type="number" id="survival" value="0" readonly>
+            <button id="survival-button" onclick="toggleSkill('survival')"></button>
+        </div>
+    </div>
+    </section>
+
+    <!-- Ability Scores -->
+    <section class="section ability-scores">
+    <div class="stat-box">
+        <label for="STR-score">STR</label>
+        <input type="number" id="STR-score" value="8" min="1" max="30" oninput="updateAbilityModifiers()">
+        <div id="STR-modifier" class="modifier-display">Modifier: -1</div>
+    </div>
+    <div class="stat-box">
+        <label for="DEX-score">DEX</label>
+        <input type="number" id="DEX-score" value="8" min="1" max="30" oninput="updateAbilityModifiers()">
+        <div id="DEX-modifier" class="modifier-display">Modifier: -1</div>
+    </div>
+    <div class="stat-box">
+        <label for="CON-score">CON</label>
+        <input type="number" id="CON-score" value="8" min="1" max="30" oninput="updateAbilityModifiers()">
+        <div id="CON-modifier" class="modifier-display">Modifier: -1</div>
+    </div>
+    <div class="stat-box">
+        <label for="INT-score">INT</label>
+        <input type="number" id="INT-score" value="8" min="1" max="30" oninput="updateAbilityModifiers()">
+        <div id="INT-modifier" class="modifier-display">Modifier: -1</div>
+    </div>
+    <div class="stat-box">
+        <label for="WIS-score">WIS</label>
+        <input type="number" id="WIS-score" value="8" min="1" max="30" oninput="updateAbilityModifiers()">
+        <div id="WIS-modifier" class="modifier-display">Modifier: -1</div>
+    </div>
+    <div class="stat-box">
+        <label for="CHA-score">CHA</label>
+        <input type="number" id="CHA-score" value="8" min="1" max="30" oninput="updateAbilityModifiers()">
+        <div id="CHA-modifier" class="modifier-display">Modifier: -1</div>
+    </div>
+    </section>
+
+    <!-- Abilities -->
+    <section class="section abilities">
+        <h3>Abilities</h3>
+			<button onclick="addItem('abilities')">+ Add Ability</button>
+			<ul id="abilities-list" class="list-container"></ul>
+    </section>
+
+    <!-- Actions -->
+    <section class="section actions">
+		<div class="tabs">
+			<button id="actions-tab" class="tab-button" onclick="switchTab('actions')">Actions</button>
+			<button id="bonus-actions-tab" class="tab-button" onclick="switchTab('bonus-actions')">Bonus Actions</button>
+			<button id="reactions-tab" class="tab-button" onclick="switchTab('reactions')">Reactions</button>
+		</div>
+
+    <!-- Actions Tab -->
+    <div id="actions-container" class="tab-content">
+        <h3>Actions</h3>
+			<button onclick="addItem('actions')">+ Add Action</button>
+			<ul id="actions-list" class="list-container"></ul>
+    </div>
+
+    <!-- Bonus Actions Tab -->
+    <div id="bonus-actions-container" class="tab-content">
+		<h3>Bonus Actions</h3>
+			<button onclick="addItem('bonus-actions')">+ Add Bonus Action</button>
+			<ul id="bonus-actions-list" class="list-container"></ul>
+    </div>
+
+    <!-- Reactions Tab -->
+    <div id="reactions-container" class="tab-content">
+        <h3>Reactions</h3>
+			<button onclick="addItem('reactions')">+ Add Reaction</button>
+			<ul id="reactions-list" class="list-container"></ul>
+    </div>
+    </section>
+
+    <!-- Placeholder -->
+    <section class="section placeholder">
+        <h3>Placeholder</h3>
+        <!-- Empty -->
+    </section>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</body>
+</html>
